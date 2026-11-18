@@ -1,0 +1,17 @@
+---
+/* Tracés des logos d'outils, déclarés une seule fois et réutilisés par <use href="#i-…">. */
+import { tools } from '../content/site';
+import { getTool } from '../lib/content';
+
+const icons = tools.map((tool) => getTool(tool.id)).filter((tool) => tool?.path);
+---
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  {
+    icons.map((tool) => (
+      <symbol id={`i-${tool!.id}`} viewBox="0 0 24 24">
+        <path d={tool!.path} />
+      </symbol>
+    ))
+  }
+</svg>

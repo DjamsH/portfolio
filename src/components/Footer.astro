@@ -1,0 +1,14 @@
+---
+import { contact, identity } from '../content/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="wrap pb-8">
+  <span class="rule rule-thin" data-rule></span>
+  <div class="label flex flex-wrap justify-between gap-x-10 gap-y-2 pt-5">
+    <p>© {year} {identity.company}</p>
+    <p>{contact.legal}</p>
+    <p>{identity.locations.join(' · ')}</p>
+  </div>
+</footer>

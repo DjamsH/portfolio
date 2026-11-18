@@ -1,0 +1,10 @@
+---
+import CaseStudy from './CaseStudy.astro';
+import SectionHead from './SectionHead.astro';
+import { cases, casesIntro } from '../content/site';
+---
+
+<section id="etudes-de-cas" class="wrap pt-[clamp(32px,5vw,72px)]" aria-labelledby="cas-title">
+  <SectionHead id="cas-title" label={casesIntro.label} title={casesIntro.title} />
+  {cases.map((study) => <CaseStudy study={study} />)}
+</section>

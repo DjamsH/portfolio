@@ -1,0 +1,123 @@
+---
+import ToolLogo from './ToolLogo.astro';
+import { parcours } from '../content/site';
+import { getTool } from '../lib/content';
+
+const lanes = parcours.lanes
+  .map((lane) => ({ role: lane.role, from: getTool(lane.from), to: getTool(lane.to) }))
+  .filter((lane) => lane.from && lane.to);
+
+const span = parcours.timelineEnd - parcours.timelineStart;
+const milestones = parcours.milestones.map((milestone, index, all) => ({
+  ...milestone,
+  position: Math.round(((milestone.year - parcours.timelineStart) / span) * 1000) / 10,
+  side: index % 2 === 0 ? 'bottom' : 'top',
+  edge: index === 0 ? 'start' : index === all.length - 1 ? 'end' : 'middle',
+}));
+---
+
+<section
+  id="parcours"
+  class="parcours on-ink mt-[var(--section)]"
+  aria-labelledby="parcours-title"
+  data-parcours
+>
+  <div class="wrap parcours-inner">
+    <div>
+      <span class="rule" data-rule></span>
+      <div class="flex items-baseline justify-between gap-6 pt-5">
+        <h2 id="parcours-title" class="label">{parcours.label}</h2>
+        <p class="label">{parcours.timelineStart} – {parcours.timelineEnd}</p>
+      </div>
+
+      <div class="grid-12 gap-y-10 pt-8 lg:pt-[clamp(20px,4vh,48px)]">
+        <div class="col-span-12 md:col-span-6 lg:col-span-5" data-parcours-before>
+          <p class="parcours-title">{parcours.before.title}</p>
+          <p class="label mt-4">{parcours.before.period}</p>
+          <p class="mt-2 max-w-[44ch] text-[15px] leading-normal text-[#d9d7cf]">
+            {parcours.before.text}
+          </p>
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-5 lg:col-start-8" data-parcours-after>
+          <p class="parcours-title text-accent-ink"><em>{parcours.after.title}</em></p>
+          <p class="label mt-4">{parcours.after.period}</p>
+          <p class="mt-2 max-w-[44ch] text-[15px] leading-normal text-[#d9d7cf]">
+            {parcours.after.text}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <ul class="lanes" aria-label="Chaque outil d’hier et son équivalent d’aujourd’hui">
+      {
+        lanes.map((lane) => (
+          <li class="lane" data-lane>
+            <span class="lane-role label">{lane.role}</span>
+            <div class="lane-from" data-lane-from>
+              <ToolLogo tool={lane.from!} />
+            </div>
+            <span class="lane-arrow" aria-hidden="true" />
+            <div class="lane-track" aria-hidden="true">
+              <span class="lane-track-fill" data-lane-fill />
+            </div>
+            <div class="lane-to" data-lane-to>
+              <ToolLogo tool={lane.to!} />
+            </div>
+            <span class="lane-mover" data-lane-mover aria-hidden="true">
+              <span class="lane-mover-face" data-lane-old>
+                {lane.from!.path ? (
+                  <svg viewBox="0 0 24 24">
+                    <use href={`#i-${lane.from!.id}`} />
+                  </svg>
+                ) : (
+                  <span class="tool-wordmark">{lane.from!.name}</span>
+                )}
+              </span>
+              <span class="lane-mover-face" data-lane-new>
+                {lane.to!.path ? (
+                  <svg viewBox="0 0 24 24">
+                    <use href={`#i-${lane.to!.id}`} />
+                  </svg>
+                ) : (
+                  <span class="tool-wordmark">{lane.to!.name}</span>
+                )}
+              </span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="frise" data-frise>
+      <div class="frise-line" aria-hidden="true">
+        <span class="frise-fill" data-frise-fill></span>
+        {
+          milestones.map((milestone) => (
+            <span
+              class:list={['frise-tick', milestone.pivot && 'frise-tick--pivot']}
+              style={`left:${milestone.position}%`}
+            />
+          ))
+        }
+      </div>
+      <ol class="frise-list">
+        {
+          milestones.map((milestone) => (
+            <li
+              class="frise-item"
+              style={`--pos:${milestone.position}%`}
+              data-side={milestone.side}
+              data-edge={milestone.edge}
+              data-pos={milestone.position}
+              data-frise-item
+            >
+              <span class="label frise-year">{milestone.year}</span>
+              <span class="frise-client">{milestone.client}</span>
+              <span class="frise-note">{milestone.note}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>

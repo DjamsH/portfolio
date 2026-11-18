@@ -1,0 +1,17 @@
+---
+import { edge } from '../../lib/viz';
+
+interface Props {
+  from: [number, number];
+  to: [number, number];
+  t: number;
+  d?: number;
+}
+const { from, to, t, d = 0.4 } = Astro.props;
+const e = edge(from[0], from[1], to[0], to[1]);
+---
+
+<g transform={`translate(${e.x} ${e.y}) rotate(${e.angle})`}>
+  <line class="viz-line" x1="0" y1="0" x2={e.length} y2="0" data-a="draw" data-t={t} data-d={d}
+  ></line>
+</g>

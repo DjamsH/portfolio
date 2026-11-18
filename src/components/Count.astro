@@ -1,0 +1,21 @@
+---
+import { formatFigure } from '../lib/content';
+import type { Figure } from '../content/site';
+
+interface Props {
+  figure: Figure;
+}
+const { figure } = Astro.props;
+const text = formatFigure(figure);
+---
+
+<span
+  class="count"
+  data-count={figure.value}
+  data-prefix={figure.prefix ?? ''}
+  data-suffix={figure.suffix ?? ''}
+>
+  <span class="sr-only">{text}</span>
+  <span class="count-sizer" aria-hidden="true">{text}</span>
+  <span class="count-live" aria-hidden="true">{text}</span>
+</span>

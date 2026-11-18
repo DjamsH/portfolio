@@ -1,0 +1,36 @@
+---
+import type { ResolvedTool } from '../lib/content';
+
+interface Props {
+  tool: ResolvedTool;
+  /** Affiche le nom à côté de l'icône. Sans nom, l'icône porte le texte alternatif. */
+  showName?: boolean;
+}
+const { tool, showName = true } = Astro.props;
+---
+
+<span class="tool" style={tool.hex ? `--brand:#${tool.hex}` : undefined} data-tool={tool.id}>
+  {
+    tool.path ? (
+      <>
+        <span class="tool-ico">
+          <svg
+            class="tool-ico-mono"
+            viewBox="0 0 24 24"
+            role={showName ? undefined : 'img'}
+            aria-label={showName ? undefined : `Logo ${tool.name}`}
+            aria-hidden={showName ? 'true' : undefined}
+          >
+            <use href={`#i-${tool.id}`} />
+          </svg>
+          <svg class="tool-ico-brand" viewBox="0 0 24 24" aria-hidden="true">
+            <use href={`#i-${tool.id}`} />
+          </svg>
+        </span>
+        {showName && <span class="tool-name">{tool.name}</span>}
+      </>
+    ) : (
+      <span class="tool-wordmark">{tool.name}</span>
+    )
+  }
+</span>

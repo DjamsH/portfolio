@@ -1,0 +1,30 @@
+---
+import Rich from './Rich.astro';
+import { contact, identity } from '../content/site';
+
+---
+
+<section id="contact" class="wrap pt-[var(--section)]" aria-labelledby="contact-title">
+  <span class="rule" data-rule></span>
+  <p class="label pt-5">{contact.label}</p>
+  <h2 id="contact-title" class="contact-title pt-10 lg:pt-16" data-split>
+    <Rich text={contact.title} />
+  </h2>
+
+  <div class="grid-12 gap-y-8 pt-10 pb-[var(--section)] lg:pt-16">
+    <p class="col-span-12 max-w-[46ch] text-[17px] leading-[1.6] text-ink-2 lg:col-span-5">
+      {contact.text}
+    </p>
+    <div class="col-span-12 flex flex-wrap items-center gap-x-10 gap-y-5 lg:col-span-7 lg:justify-end">
+      <a class="btn" href={`mailto:${identity.email}`} data-magnetic>
+        <span>{contact.cta}</span>
+      </a>
+      <a class="link-u link-u--rest link-pad font-medium" href={`mailto:${identity.email}`}>
+        {identity.email}
+      </a>
+      <a class="link-u link-u--rest link-pad font-medium" href={identity.linkedin} rel="me noopener">
+        {contact.linkedinLabel}
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,10 @@
+---
+import { richParts } from '../lib/content';
+
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+
+{richParts(text).map((part) => (part.em ? <em>{part.text}</em> : part.text))}

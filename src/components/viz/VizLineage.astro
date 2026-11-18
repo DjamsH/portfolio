@@ -1,0 +1,93 @@
+---
+/* Étude de cas 02 : un lineage dbt se construit, un test échoue, la revue le corrige. */
+import VizEdge from './VizEdge.astro';
+
+interface Props {
+  alt: string;
+}
+const { alt } = Astro.props;
+
+const S = 16; // côté d'un nœud
+const cols = { sources: 40, staging: 133, inter: 226, marts: 320 };
+const rows4 = [66, 122, 178, 234];
+const interRows = [94, 206];
+const martRows = [94, 150, 206];
+const half = S / 2;
+---
+
+<svg class="viz" viewBox="0 0 360 330" role="img" aria-label={alt} data-viz>
+  <text class="viz-cap" x={cols.sources} y="12" text-anchor="middle">Sources</text>
+  <text class="viz-cap" x={cols.staging} y="12" text-anchor="middle">Staging</text>
+  <text class="viz-cap" x={cols.inter} y="12" text-anchor="middle">Interm.</text>
+  <text class="viz-cap" x={cols.marts} y="12" text-anchor="middle">Marts</text>
+
+  <!-- Arêtes -->
+  {
+    rows4.map((y, index) => (
+      <VizEdge from={[cols.sources + half, y]} to={[cols.staging - half, y]} t={0.6 + index * 0.06} />
+    ))
+  }
+  <VizEdge from={[cols.staging + half, rows4[0]]} to={[cols.inter - half, interRows[0]]} t={1.7} />
+  <VizEdge from={[cols.staging + half, rows4[1]]} to={[cols.inter - half, interRows[0]]} t={1.76} />
+  <VizEdge from={[cols.staging + half, rows4[2]]} to={[cols.inter - half, interRows[0]]} t={1.82} />
+  <VizEdge from={[cols.staging + half, rows4[2]]} to={[cols.inter - half, interRows[1]]} t={1.88} />
+  <VizEdge from={[cols.staging + half, rows4[3]]} to={[cols.inter - half, interRows[1]]} t={1.94} />
+
+  <VizEdge from={[cols.inter + half, interRows[0]]} to={[cols.marts - half, martRows[0]]} t={4.0} />
+  <VizEdge from={[cols.inter + half, interRows[0]]} to={[cols.marts - half, martRows[1]]} t={4.06} />
+  <VizEdge from={[cols.inter + half, interRows[1]]} to={[cols.marts - half, martRows[1]]} t={4.12} />
+  <VizEdge from={[cols.inter + half, interRows[1]]} to={[cols.marts - half, martRows[2]]} t={4.18} />
+
+  <!-- Nœuds : contour permanent, remplissage quand le modèle est construit -->
+  {
+    rows4.map((y, index) => (
+      <>
+        <rect class="viz-box" x={cols.sources - half} y={y - half} width={S} height={S} />
+        <rect class="viz-fill" x={cols.sources - half} y={y - half} width={S} height={S} data-a="fade" data-t={index * 0.1} data-d="0.3" />
+        <rect class="viz-box" x={cols.staging - half} y={y - half} width={S} height={S} />
+        <rect class="viz-fill" x={cols.staging - half} y={y - half} width={S} height={S} data-a="fade" data-t={1.1 + index * 0.1} data-d="0.3" />
+      </>
+    ))
+  }
+
+  <rect class="viz-box" x={cols.inter - half} y={interRows[0] - half} width={S} height={S}></rect>
+  <rect class="viz-fill" x={cols.inter - half} y={interRows[0] - half} width={S} height={S} data-a="fade" data-t="2.3" data-d="0.3"
+  ></rect>
+
+  <!-- Le modèle dont le test échoue, puis passe après revue -->
+  <rect class="viz-box" x={cols.inter - half} y={interRows[1] - half} width={S} height={S}></rect>
+  <rect class="viz-fill" x={cols.inter - half} y={interRows[1] - half} width={S} height={S} data-a="fade" data-t="3.5" data-d="0.3"
+  ></rect>
+  <rect class="viz-accent" x={cols.inter - half - 3} y={interRows[1] - half - 3} width={S + 6} height={S + 6} opacity="0" data-a="flash" data-t="2.4" data-d="1.3"
+  ></rect>
+  <text class="viz-accent-text" x={cols.inter} y={interRows[1] + 30} text-anchor="middle" opacity="0" data-a="flash" data-t="2.4" data-d="1.3">
+    test en échec
+  </text>
+  <text x={cols.inter} y={interRows[1] + 30} text-anchor="middle" data-a="fade" data-t="3.6" data-d="0.4">
+    corrigé en revue
+  </text>
+
+  {
+    martRows.map((y, index) => (
+      <>
+        <rect class="viz-box" x={cols.marts - half} y={y - half} width={S} height={S} />
+        <rect class="viz-fill" x={cols.marts - half} y={y - half} width={S} height={S} data-a="fade" data-t={4.5 + index * 0.1} data-d="0.3" />
+        <path
+          d={`M${cols.marts - 4} ${y} l3 3 l5.5 -6.5`}
+          fill="none"
+          stroke="var(--color-paper)"
+          stroke-width="1.6"
+          data-a="fade"
+          data-t={4.9 + index * 0.1}
+          data-d="0.3"
+        />
+      </>
+    ))
+  }
+
+  <!-- Barre de build : avance avec le défilement -->
+  <text x="20" y="306">dbt build</text>
+  <line class="viz-line" x1="92" y1="302" x2="340" y2="302" opacity="0.25"></line>
+  <line class="viz-line" x1="92" y1="302" x2="340" y2="302" style="stroke-width:2" data-a="draw" data-t="0" data-d="5.2" data-ease="none"
+  ></line>
+</svg>

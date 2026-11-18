@@ -1,0 +1,34 @@
+---
+import { identity, nav, strap } from '../content/site';
+---
+
+<header class="wrap pt-5 lg:pt-7">
+  <div class="flex flex-wrap items-center justify-between gap-x-10 pb-2 lg:pb-3">
+    <a href="/" class="masthead-name py-2" aria-label={`${identity.name}, accueil`}>{identity.name}</a>
+    <nav aria-label="Navigation principale">
+      <ul class="-mx-2 flex flex-wrap lg:-mx-3">
+        {
+          nav.map((item) => (
+            <li>
+              <a class="nav-link link-u mx-2 lg:mx-3" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+  <span class="rule" data-rule></span>
+  <p class="label flex flex-wrap gap-x-3 gap-y-1 py-3">
+    {
+      strap.map((item, index) => (
+        <>
+          {index > 0 && <span aria-hidden="true">·</span>}
+          <span>{item}</span>
+        </>
+      ))
+    }
+  </p>
+  <span class="rule rule-thin" data-rule></span>
+</header>

@@ -1,0 +1,25 @@
+---
+import SectionHead from './SectionHead.astro';
+import { offers, offersIntro } from '../content/site';
+---
+
+<section id="offre" class="wrap pt-[var(--section)]" aria-labelledby="offre-title">
+  <SectionHead id="offre-title" label={offersIntro.label} title={offersIntro.title} />
+  <ul>
+    {
+      offers.map((offer) => (
+        <li>
+          <span class="rule rule-thin" data-rule />
+          <div class="grid-12 gap-y-4 py-8 lg:py-11">
+            <h3 class="offer-title col-span-12 lg:col-span-5">{offer.title}</h3>
+            <p class="col-span-12 max-w-[56ch] text-[17px] leading-[1.6] text-ink-2 lg:col-span-5">
+              {offer.text}
+            </p>
+            <p class="label col-span-12 lg:col-span-2 lg:pt-1.5 lg:text-right">{offer.scope}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+  <span class="rule rule-thin" data-rule></span>
+</section>

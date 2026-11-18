@@ -1,0 +1,82 @@
+---
+import { hero } from '../content/site';
+
+---
+
+<section class="wrap pt-10 pb-[var(--section)] lg:pt-14" aria-labelledby="hero-title">
+  <div class="hero-stage">
+    <h1 id="hero-title" class="hero-title">
+      {
+        hero.titleLines.map((line, index) => (
+          <span class="hl-mask">
+            <span class="hl" style={`--i:${index}`}>
+              {line.accent ? (
+                <em class="hero-accent">
+                  <span class="hero-accent-base">{line.text}</span>
+                  <span class="hero-accent-ink" aria-hidden="true">
+                    {line.text}
+                  </span>
+                  <span class="hero-accent-line" aria-hidden="true" />
+                </em>
+              ) : (
+                line.text
+              )}
+            </span>{' '}
+          </span>
+        ))
+      }
+    </h1>
+
+    <div class="hero-portrait-slot mt-10 hidden lg:mt-0 lg:block" data-intro="portrait">
+      <div class="hero-portrait">
+        <img
+          src={hero.portrait.src}
+          alt={hero.portrait.alt}
+          width={hero.portrait.width}
+          height={hero.portrait.height}
+          decoding="async"
+        />
+        <div class="hero-curtain" data-hero-curtain></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-12 mt-10 gap-y-8 lg:mt-16">
+    <p
+      class="hero-standfirst col-span-12 md:col-span-6 md:row-start-1 lg:col-span-5"
+      data-intro="text"
+      style="--i:0"
+    >
+      {hero.standfirst}
+    </p>
+
+    <div class="col-span-12 md:col-span-6 md:row-start-2 lg:col-span-5 lg:col-start-7 lg:row-start-1" data-intro="text" style="--i:1">
+      <p class="text-[17px] leading-[1.6] text-ink-2">{hero.body}</p>
+      <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+        <a class="btn" href={hero.primaryCta.href} data-magnetic>
+          <span>{hero.primaryCta.label}</span>
+        </a>
+        <a class="link-u link-u--rest link-pad font-medium" href={hero.secondaryCta.href}>
+          {hero.secondaryCta.label}
+        </a>
+      </div>
+    </div>
+
+    <!-- Portrait dans le flux sous 1024 px -->
+    <div
+      class="col-span-8 sm:col-span-5 md:col-span-5 md:col-start-8 md:row-span-2 md:row-start-1 lg:hidden"
+      data-intro="portrait"
+    >
+      <div class="hero-portrait">
+        <img
+          src={hero.portrait.src}
+          alt={hero.portrait.alt}
+          width={hero.portrait.width}
+          height={hero.portrait.height}
+          decoding="async"
+        />
+        <div class="hero-curtain" data-hero-curtain></div>
+      </div>
+    </div>
+  </div>
+</section>

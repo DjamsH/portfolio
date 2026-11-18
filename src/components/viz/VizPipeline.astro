@@ -1,0 +1,76 @@
+---
+/* Étude de cas 01 : les flux RH descendent jusqu'à Snowflake, qui sert Streamlit et Cortex. */
+import VizEdge from './VizEdge.astro';
+
+interface Props {
+  alt: string;
+}
+const { alt } = Astro.props;
+const sources = [120, 180, 240];
+---
+
+<svg class="viz" viewBox="0 0 360 330" role="img" aria-label={alt} data-viz>
+  <text class="viz-cap" x="180" y="12" text-anchor="middle">Sources RH</text>
+  {
+    sources.map((x, index) => (
+      <rect
+        class="viz-box"
+        x={x - 14}
+        y="24"
+        width="28"
+        height="28"
+        data-a="pop"
+        data-t={index * 0.1}
+      />
+    ))
+  }
+
+  <VizEdge from={[120, 52]} to={[150, 92]} t={0.45} />
+  <VizEdge from={[180, 52]} to={[180, 92]} t={0.5} />
+  <VizEdge from={[240, 52]} to={[210, 92]} t={0.55} />
+
+  <!-- Paquets de données : invisibles au repos. Ils suivent les traits et passent
+       derrière les blocs (déclarés avant eux). data-v : étapes « dx,dy » successives. -->
+  <circle class="viz-accent" cx="120" cy="52" r="3.5" opacity="0" data-a="travel" data-t="0.7" data-d="1.9" data-v="30,40,60,76,60,156"
+  ></circle>
+  <circle class="viz-accent" cx="180" cy="52" r="3.5" opacity="0" data-a="travel" data-t="1" data-d="1.9" data-v="0,40,0,76,0,156"
+  ></circle>
+  <circle class="viz-accent" cx="240" cy="52" r="3.5" opacity="0" data-a="travel" data-t="1.3" data-d="1.9" data-v="-30,40,-60,76,-60,156"
+  ></circle>
+
+  <g data-a="rise" data-t="0.85">
+    <rect class="viz-box" x="90" y="92" width="180" height="36"></rect>
+    <text x="180" y="114.5" text-anchor="middle">Snowpipe · Tasks</text>
+  </g>
+
+  <VizEdge from={[180, 128]} to={[180, 150]} t={1.25} d={0.3} />
+
+  <g data-a="rise" data-t="1.5">
+    <rect class="viz-box" x="90" y="150" width="180" height="36"></rect>
+    <text x="180" y="172.5" text-anchor="middle">dbt Core</text>
+  </g>
+
+  <VizEdge from={[180, 186]} to={[180, 208]} t={1.9} d={0.3} />
+
+  <rect class="viz-box" x="60" y="208" width="240" height="44" data-a="fade" data-t="2.1" data-d="0.3"
+  ></rect>
+  <rect class="viz-fill" x="60" y="208" width="240" height="44" data-a="wipe" data-t="2.3" data-d="0.7"
+  ></rect>
+  <text class="viz-on-ink" x="180" y="234.5" text-anchor="middle" data-a="fade" data-t="2.6">
+    Snowflake
+  </text>
+
+  <VizEdge from={[120, 252]} to={[96, 282]} t={3.1} />
+  <VizEdge from={[240, 252]} to={[264, 282]} t={3.2} />
+
+  <g data-a="rise" data-t="3.5">
+    <rect class="viz-box" x="20" y="282" width="152" height="36"></rect>
+    <text x="96" y="304.5" text-anchor="middle">Streamlit</text>
+  </g>
+  <g data-a="rise" data-t="3.7">
+    <rect class="viz-box" x="188" y="282" width="152" height="36" style="stroke:var(--color-accent)"
+    ></rect>
+    <text class="viz-accent-text" x="238" y="304.5">Cortex</text>
+    <rect class="viz-accent viz-caret" x="284" y="294" width="7" height="13"></rect>
+  </g>
+</svg>

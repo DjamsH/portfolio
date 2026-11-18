@@ -1,0 +1,25 @@
+---
+import type { Client } from '../content/site';
+import { clientLogoRatio } from '../lib/logos';
+
+interface Props {
+  client: Client;
+  height?: number;
+  /** Logo décoratif (doublon du bandeau) : texte alternatif vide. */
+  decorative?: boolean;
+  lazy?: boolean;
+}
+const { client, height = 26, decorative = false, lazy = true } = Astro.props;
+const width = Math.round(clientLogoRatio(client.file) * height);
+---
+
+<img
+  class="client-logo"
+  src={`/logos/clients/${client.file}`}
+  alt={decorative ? '' : `Logo ${client.name}`}
+  width={width}
+  height={height}
+  style={`height:${height}px`}
+  loading={lazy ? 'lazy' : 'eager'}
+  decoding="async"
+/>

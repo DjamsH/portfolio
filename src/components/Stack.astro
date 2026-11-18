@@ -1,0 +1,33 @@
+---
+import SectionHead from './SectionHead.astro';
+import ToolLogo from './ToolLogo.astro';
+import { stack, stackIntro } from '../content/site';
+import { getTools } from '../lib/content';
+
+const families = stack
+  .map((group) => ({ family: group.family, tools: getTools(group.tools) }))
+  .filter((group) => group.tools.length > 0);
+---
+
+<section id="stack" class="wrap pt-[var(--section)]" aria-labelledby="stack-title">
+  <SectionHead id="stack-title" label={stackIntro.label} title={stackIntro.title} />
+  <div data-stack>
+    {
+      families.map((group) => (
+        <div class="grid-12 gap-y-4 border-t border-ink py-6 lg:py-8" data-stack-family>
+          <h3 class="label col-span-12 lg:col-span-3 lg:pt-1.5" style="font-family:var(--font-sans)">
+            {group.family}
+          </h3>
+          <ul class="stack-tools col-span-12 flex flex-wrap gap-x-10 gap-y-4 lg:col-span-9">
+            {group.tools.map((tool) => (
+              <li data-stack-tool>
+                <ToolLogo tool={tool} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+    <span class="rule rule-thin"></span>
+  </div>
+</section>

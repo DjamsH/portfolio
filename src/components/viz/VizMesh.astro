@@ -1,0 +1,66 @@
+---
+/* Étude de cas 03 : des domaines épars s'assemblent autour d'une plateforme commune. */
+import VizEdge from './VizEdge.astro';
+import { meshDomains } from '../../content/site';
+
+interface Props {
+  alt: string;
+}
+const { alt } = Astro.props;
+
+const W = 104;
+const H = 40;
+// Position finale de chaque domaine, et son décalage de départ (dx, dy, rotation).
+const slots = [
+  { x: 16, y: 34, from: '26,34,-9' },
+  { x: 240, y: 34, from: '-34,22,7' },
+  { x: 16, y: 256, from: '38,-30,6' },
+  { x: 240, y: 256, from: '-22,-40,-8' },
+];
+const domains = meshDomains.slice(0, 4).map((name, index) => ({ name, ...slots[index] }));
+---
+
+<svg class="viz" viewBox="0 0 360 330" role="img" aria-label={alt} data-viz>
+  <!-- Maillage entre domaines -->
+  <VizEdge from={[120, 54]} to={[240, 54]} t={2.3} d={0.5} />
+  <VizEdge from={[120, 276]} to={[240, 276]} t={2.4} d={0.5} />
+  <VizEdge from={[40, 74]} to={[40, 256]} t={2.5} d={0.5} />
+  <VizEdge from={[320, 74]} to={[320, 256]} t={2.6} d={0.5} />
+
+  <!-- Rayons vers la plateforme -->
+  <VizEdge from={[84, 74]} to={[132, 141]} t={1.6} />
+  <VizEdge from={[276, 74]} to={[228, 141]} t={1.68} />
+  <VizEdge from={[84, 256]} to={[132, 189]} t={1.76} />
+  <VizEdge from={[276, 256]} to={[228, 189]} t={1.84} />
+
+  <!-- Plateforme commune -->
+  <g data-a="pop" data-t="1.1" data-d="0.6">
+    <rect class="viz-fill" x="104" y="141" width="152" height="48"></rect>
+    <text class="viz-on-ink" x="180" y="162" text-anchor="middle">Snowflake</text>
+    <text class="viz-cap" x="180" y="178" text-anchor="middle" style="fill:var(--color-label-ink)">
+      Gouvernance
+    </text>
+  </g>
+
+  <!-- Domaines -->
+  {
+    domains.map((domain, index) => (
+      <g data-a="move" data-t={index * 0.14} data-d="1" data-v={domain.from}>
+        <rect class="viz-box" x={domain.x} y={domain.y} width={W} height={H} />
+        <text x={domain.x + 14} y={domain.y + 24.5}>
+          {domain.name}
+        </text>
+        <rect
+          class="viz-accent"
+          x={domain.x + W - 20}
+          y={domain.y + 16}
+          width="8"
+          height="8"
+          data-a="pop"
+          data-t={3 + index * 0.1}
+          data-d="0.4"
+        />
+      </g>
+    ))
+  }
+</svg>

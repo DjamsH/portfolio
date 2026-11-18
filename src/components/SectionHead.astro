@@ -1,0 +1,22 @@
+---
+import Rich from './Rich.astro';
+
+interface Props {
+  id: string;
+  label: string;
+  title: string;
+}
+const { id, label, title } = Astro.props;
+---
+
+<span class="rule" data-rule></span>
+<div class="grid-12 pt-5 pb-12 lg:pb-20">
+  <p class="label col-span-12 pb-5 lg:col-span-3 lg:pt-3 lg:pb-0">{label}</p>
+  <h2
+    id={id}
+    class="col-span-12 text-[clamp(36px,5vw,68px)] leading-none lg:col-span-9"
+    data-split
+  >
+    <Rich text={title} />
+  </h2>
+</div>

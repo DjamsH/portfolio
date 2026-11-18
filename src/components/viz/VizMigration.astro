@@ -1,0 +1,64 @@
+---
+/* Étude de cas 04 : les flux basculent un à un de l'ancien système vers Google Cloud. */
+import { migrationUnit } from '../../content/site';
+import { formatNumber } from '../../lib/content';
+import { round } from '../../lib/viz';
+
+interface Props {
+  alt: string;
+  /** Nombre total de flux représentés. */
+  total: number;
+}
+const { alt, total } = Astro.props;
+
+const COLS = 12;
+const CELL = 22;
+const GAP = 6;
+const X0 = 15;
+const Y0 = 34;
+
+const count = Math.max(1, Math.round(total / migrationUnit));
+const rows = Math.ceil(count / COLS);
+const cells = Array.from({ length: count }, (_, index) => {
+  const col = index % COLS;
+  const row = Math.floor(index / COLS);
+  return { x: X0 + col * (CELL + GAP), y: Y0 + row * (CELL + GAP), wave: col + row };
+});
+const maxWave = Math.max(...cells.map((cell) => cell.wave));
+const span = 4.6; // durée totale de la bascule
+// Les carrés d'une même diagonale basculent ensemble : une animation par vague.
+const waves = Array.from({ length: maxWave + 1 }, (_, wave) => ({
+  t: round((wave / Math.max(1, maxWave)) * span),
+  cells: cells.filter((cell) => cell.wave === wave),
+})).filter((wave) => wave.cells.length > 0);
+const gridBottom = Y0 + rows * (CELL + GAP) - GAP;
+const height = gridBottom + 30;
+
+const outline = cells.map((c) => `M${c.x} ${c.y}h${CELL}v${CELL}h${-CELL}z`).join('');
+const unitLabel = formatNumber(migrationUnit);
+---
+
+<svg class="viz" viewBox={`0 0 360 ${height}`} role="img" aria-label={alt} data-viz>
+  <text x={X0} y="16">Teradata · Talend</text>
+  <text x={360 - X0} y="16" text-anchor="end">BigQuery · Airflow</text>
+
+  <path class="viz-line" d={outline} style="stroke-width:1"></path>
+  {
+    waves.map((wave) => (
+      <>
+        <g data-a="fade" data-t={round(wave.t + 0.2)} data-d="0.3">
+          {wave.cells.map((cell) => (
+            <rect class="viz-fill" x={cell.x} y={cell.y} width={CELL} height={CELL} />
+          ))}
+        </g>
+        <g opacity="0" data-a="flash" data-t={wave.t} data-d="0.6">
+          {wave.cells.map((cell) => (
+            <rect class="viz-accent" x={cell.x} y={cell.y} width={CELL} height={CELL} />
+          ))}
+        </g>
+      </>
+    ))
+  }
+
+  <text class="viz-cap" x={X0} y={gridBottom + 22}>Un carré = {unitLabel} flux</text>
+</svg>

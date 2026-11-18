@@ -1,0 +1,47 @@
+---
+import ClientLogo from './ClientLogo.astro';
+import { clientsHeading } from '../content/site';
+import { enabledClients } from '../lib/content';
+
+// Le bandeau défile de la moitié de sa largeur : chaque moitié doit couvrir l'écran.
+const half = [];
+while (enabledClients.length > 0 && half.length < 9) half.push(...enabledClients);
+---
+
+{
+  enabledClients.length > 0 && (
+    <section class="wrap py-12 lg:py-16" aria-labelledby="clients-title">
+      <div class="flex items-center justify-between gap-6 pb-8 lg:pb-10">
+        <h2 id="clients-title" class="label">
+          {clientsHeading}
+        </h2>
+        <button
+          type="button"
+          class="marquee-toggle label link-u -my-3 py-3"
+          data-marquee-toggle
+          hidden
+        >
+          Pause
+        </button>
+      </div>
+      <div class="marquee" data-marquee>
+        <div class="marquee-track" style={`--marquee-duration:${half.length * 5}s`}>
+          <ul class="marquee-group">
+            {half.map((client, index) => (
+              <li aria-hidden={index >= enabledClients.length ? 'true' : undefined}>
+                <ClientLogo client={client} decorative={index >= enabledClients.length} />
+              </li>
+            ))}
+          </ul>
+          <ul class="marquee-group" aria-hidden="true">
+            {half.map((client) => (
+              <li>
+                <ClientLogo client={client} decorative />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )
+}
