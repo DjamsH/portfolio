@@ -22,6 +22,8 @@ for (const client of clients) {
   // Nom court pour le placeholder : sans la parenthèse ni le préfixe d'enseigne.
   const name = client.name.split(' (')[0].replace('Tapis ', '');
   const target = join(clientsDir, file);
+  // Seuls les SVG ont un placeholder ; un logo PNG ou JPEG est fourni tel quel.
+  if (!file.endsWith('.svg')) continue;
   if (existsSync(target) && !force) continue;
   const label = name.toUpperCase();
   // Largeur fixée par textLength : le rendu ne dépend pas de la police disponible.

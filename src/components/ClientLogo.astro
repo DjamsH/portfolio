@@ -4,13 +4,21 @@ import { clientLogoRatio } from '../lib/logos';
 
 interface Props {
   client: Client;
+  /** Hauteur de référence, celle d'un logo allongé (mot seul). */
   height?: number;
   /** Logo décoratif (doublon du bandeau) : texte alternatif vide. */
   decorative?: boolean;
   lazy?: boolean;
 }
 const { client, height = 26, decorative = false, lazy = true } = Astro.props;
-const width = Math.round(clientLogoRatio(client.file) * height);
+
+// Hauteur optique : à hauteur égale, un logo carré paraît bien plus petit qu'un logo allongé.
+// On vise une surface comparable, dans des bornes raisonnables.
+const ratio = clientLogoRatio(client.file);
+const optical = Math.round(
+  Math.min(height * 1.75, Math.max(height * 0.85, height * Math.sqrt(3.6 / ratio))),
+);
+const width = Math.round(ratio * optical);
 ---
 
 <img
@@ -18,8 +26,8 @@ const width = Math.round(clientLogoRatio(client.file) * height);
   src={`/logos/clients/${client.file}`}
   alt={decorative ? '' : `Logo ${client.name}`}
   width={width}
-  height={height}
-  style={`height:${height}px`}
+  height={optical}
+  style={`height:${optical}px`}
   loading={lazy ? 'lazy' : 'eager'}
   decoding="async"
 />

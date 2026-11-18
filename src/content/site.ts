@@ -129,8 +129,9 @@ export const keyFigures: Figure[] = [
 export const clientsHeading = 'Ils m’ont confié leurs données';
 
 /**
- * Les fichiers de public/logos/clients/ sont des placeholders (nom en capitales).
- * Les remplacer par les SVG officiels, en gardant les mêmes noms de fichier.
+ * Un fichier par client dans public/logos/clients/ : SVG de préférence, PNG ou JPEG acceptés
+ * (un fond blanc se fond dans la page). Les fichiers encore en placeholder (nom en capitales)
+ * sont à remplacer par les logos officiels, en gardant le même nom de fichier.
  * `enabled: false` tant que l'autorisation du client n'est pas vérifiée.
  */
 export const clients: Client[] = [
@@ -146,8 +147,8 @@ export const clients: Client[] = [
   },
   { id: 'vilogia', name: 'Vilogia', file: 'vilogia.svg', enabled: true },
   { id: 'syngenta', name: 'Syngenta', file: 'syngenta.svg', enabled: true },
-  { id: 'happychic', name: 'Happychic', file: 'happychic.svg', enabled: true },
-  { id: 'engie-ineo', name: 'Engie Ineo', file: 'engie-ineo.svg', enabled: true },
+  { id: 'jules', name: 'Jules', file: 'jules.svg', enabled: true }, // ex-Happychic
+  { id: 'cofely-ineo', name: 'Cofely Ineo (GDF Suez)', file: 'cofely-ineo.jpg', enabled: true },
 ];
 
 // ---------------------------------------------------------------------------
@@ -336,8 +337,8 @@ export const parcours = {
   timelineStart: 2012,
   timelineEnd: 2026,
   milestones: [
-    { year: 2012, client: 'Engie Ineo', note: 'Business Objects, PL/SQL' },
-    { year: 2013, client: 'Happychic', note: 'ODI, Oracle' },
+    { year: 2012, client: 'Cofely Ineo (GDF Suez)', note: 'Business Objects, PL/SQL' },
+    { year: 2013, client: 'Jules (ex-Happychic)', note: 'ODI, Oracle' },
     { year: 2014, client: 'Euro Information', note: 'ODI, Netezza' },
     { year: 2016, client: 'Syngenta, Vilogia', note: 'Talend, ODI' },
     { year: 2017, client: 'Auchan Retail France', note: 'Chef de projet BI' },

@@ -21,9 +21,10 @@ Tout le contenu est dans **`src/content/site.ts`** : textes, chiffres, missions,
 Aucun composant n'est à toucher pour changer un texte ou un chiffre.
 
 - **Chiffres** : tous provisoires, repérés par `// TODO: chiffre provisoire`.
-- **Logos clients** : un SVG par client dans `public/logos/clients/`. Les fichiers actuels sont
-  des placeholders (nom en capitales). Remplacez-les par les SVG officiels en gardant le même nom
-  de fichier ; la hauteur, les niveaux de gris et l'opacité sont normalisés par le site.
+- **Logos clients** : un fichier par client dans `public/logos/clients/`, SVG de préférence
+  (PNG et JPEG acceptés : un fond blanc se fond dans la page). Les fichiers au nom en capitales
+  sont des placeholders à remplacer par les logos officiels, en gardant le même nom de fichier ;
+  la hauteur, les niveaux de gris et l'opacité sont normalisés par le site.
 - **Activer ou retirer un logo** : `enabled: true | false` sur chaque client et chaque outil.
   Un logo désactivé disparaît partout (bandeau, études de cas, parcours, stack).
 - **Logos d'outils** : champ `icon`, un slug [simple-icons](https://simpleicons.org). Sans icône
